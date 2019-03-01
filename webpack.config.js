@@ -15,8 +15,8 @@ module.exports = {
   },
   externals: [
     // remove the line below if you don't want to use buildin versions
-    'jquery', 'lodash', 'moment',
-    function(context, request, callback) {
+    'jquery', 'lodash', 'moment', 'app/core/config',
+    function (context, request, callback) {
       var prefix = 'grafana/';
       if (request.indexOf(prefix) === 0) {
         return callback(null, request.substr(prefix.length));
@@ -27,13 +27,23 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new CopyWebpackPlugin([
-      { from: 'plugin.json' },
+      {from: '../README.md'},
+      {from: 'datasource/**'},
+      {from: 'dashboards/**'},
+      {from: 'css/**'},
+      {from: 'img/**'},
+      {from: 'plugin.json'},
     ])
   ],
-  resolve: {
-  },
+  resolve: {},
   module: {
     rules: [
+      //css
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      ///js
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
